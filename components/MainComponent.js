@@ -1,40 +1,41 @@
 import React, { Component } from "react";
 import Directory from "./DirectoryComponent";
 import CampsiteInfo from "./CampsiteInfoComponent";
-import { CAMPSITES } from "../Shared/campsites";
-import { View } from "react-native";
+import { View, Platform } from "react-native";
+import { createStackNavigator } from "react-navigation";
+
+const DirectoryNavigator = createStackNavigator(
+  {
+    Directory: { screen: Directory },
+    CampsiteInfo: { screen: CampsiteInfo },
+  },
+  {
+    initialRouteName: "Directory",//this is our default starting point
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: "#5637DD",
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        color: "#fff",
+      },
+    },
+  }
+);//using createStackNavigator to build our stack for navigation purposes
 
 class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      campsites: CAMPSITES,
-      selectedCampsite: null,
-    };
-  } //class main extends component and is the parent containing our campsite array in state and is being exported
-  //to app.js
-  //it also is rendering the child Directory
-
-  onCampsiteSelect(campsiteId) {
-    this.setState({ selectedCampsite: campsiteId });
-  } //reassigning selectedCampsite property to the selected campsite upon choosing
-
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Directory
-          campsites={this.state.campsites}
-          onPress={(campsiteId) => this.onCampsiteSelect(campsiteId)}
-        />
-        <CampsiteInfo
-          campsite={
-            this.state.campsites.filter(
-              (campsite) => campsite.id === this.state.selectedCampsite
-            )[0]
-          }
-        />
+      <View
+        style={{
+          flex: 1,
+          paddingTop:
+            Platform.OS === "ios" ? 0 : Expo.Constants.statusBarHeight,
+        }}
+      >
+        <DirectoryNavigator />
       </View>
-    );
+    );//main is using DirectoryNavigator to determine what we are viewing and keeping track of the stack
   }
 }
 
