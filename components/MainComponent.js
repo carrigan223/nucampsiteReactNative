@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import Home from "./HomeComponent";
 import Directory from "./DirectoryComponent";
 import CampsiteInfo from "./CampsiteInfoComponent";
 import { View, Platform } from "react-native";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 
 const DirectoryNavigator = createStackNavigator(
   {
@@ -10,7 +11,7 @@ const DirectoryNavigator = createStackNavigator(
     CampsiteInfo: { screen: CampsiteInfo },
   },
   {
-    initialRouteName: "Directory",//this is our default starting point
+    initialRouteName: "Directory", //this is our default starting point
     navigationOptions: {
       headerStyle: {
         backgroundColor: "#5637DD",
@@ -21,7 +22,34 @@ const DirectoryNavigator = createStackNavigator(
       },
     },
   }
-);//using createStackNavigator to build our stack for navigation purposes
+); //using createStackNavigator to build our stack for navigation purposes
+
+const HomeNavigator = createStackNavigator(
+  {
+    Home: { screen: Home },
+  },
+  {
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: "#5637DD",
+      },
+      headerTinetColor: "#fff",
+      headerTitleStyle: {
+        color: "#fff",
+      },
+    },
+  }
+);
+
+const MainNavigator = createDrawerNavigator(
+  {
+    Home: { screen: HomeNavigator },
+    Directory: { screen: DirectoryNavigator },
+  },
+  {
+    drawerBackgroundColor: "#CEC8FF",
+  }
+);
 
 class Main extends Component {
   render() {
@@ -33,9 +61,9 @@ class Main extends Component {
             Platform.OS === "ios" ? 0 : Expo.Constants.statusBarHeight,
         }}
       >
-        <DirectoryNavigator />
+        <MainNavigator />
       </View>
-    );//main is using DirectoryNavigator to determine what we are viewing and keeping track of the stack
+    ); //main is using MainNavigator to determine what we are viewing and keeping track of the stack
   }
 }
 
