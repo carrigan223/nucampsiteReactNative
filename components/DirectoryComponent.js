@@ -25,6 +25,7 @@ class Directory extends Component {
           subtitle={item.description}
           onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
           //onpress is returning the navigate method we took from this.props.navigation
+          //optional second param is an object where we can specify the specific id of the param
           leftAvatar={{ source: require("./images/react-lake.jpg") }}
         />
       );
