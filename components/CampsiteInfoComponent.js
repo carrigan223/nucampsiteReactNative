@@ -1,19 +1,27 @@
 import React, { Component } from "react";
 import { Text, View, ScrollView, FlatList } from "react-native";
 import { Card, Icon } from "react-native-elements";
-import { CAMPSITES } from "../Shared/campsites";
-import { COMMENTS } from "../Shared/comments"; //importing comments array from shared
+import { connect } from "react-redux";
+import { baseUrl } from "../Shared/baseUrl";
 
+const mapStateToProps = (state) => {
+  return {
+    campsites: state.campsites,
+    comments: state.comments,
+  };
+};
+//above is connecting us to the redux store which from this point forward will be handling our state and allowing us to perform asynchronous actions
 function RenderCampsite(props) {
   const { campsite } = props;
 
   if (campsite) {
     //if onpress is initiated and it takes in an ID which our filer method will take in and return
     //a campsite, if this is all true we will return the card containing that campsites info
+    console.log("favorites", props.favorite);
     return (
       <Card
         featuredTitle={campsite.name}
-        image={require("./images/react-lake.jpg")}
+        image={{ uri: baseUrl + campsite.image }}
       >
         <Text style={{ margin: 10 }}>{campsite.description}</Text>
         <Icon //this icon is the font awesome heart displayed uder the description
@@ -66,8 +74,6 @@ class CampsiteInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      campsites: CAMPSITES,
-      comments: COMMENTS,
       favorite: false,
     };
   } //our array of campsite data and comment data is held in state,
@@ -83,10 +89,10 @@ class CampsiteInfo extends Component {
 
   render() {
     const campsiteId = this.props.navigation.getParam("campsiteId"); //when we use the onpress we are getting the param of campsite id
-    const campsite = this.state.campsites.filter(
+    const campsite = this.props.campsites.campsites.filter(
       (campsite) => campsite.id === campsiteId
     )[0]; //we are using the filter method to pick out the matching id of the pressed campsite
-    const comments = this.state.comments.filter(
+    const comments = this.props.comments.comments.filter(
       (comment) => comment.campsiteId === campsiteId
     );
     //filtering out the comments that match our campsiteId,
@@ -106,4 +112,4 @@ class CampsiteInfo extends Component {
   }
 }
 
-export default CampsiteInfo;
+export default connect(mapStateToProps)(CampsiteInfo);

@@ -35,8 +35,8 @@ export const addComments = (comments) => ({
   payload: comments,
 });
 
-export const fetchCampsites = () => {
-  dispatch(campsiteLoading());
+export const fetchCampsites = () => (dispatch) => {
+  dispatch(campsitesLoading());
 
   return fetch(baseUrl + "campsites")
     .then(
@@ -62,7 +62,7 @@ export const fetchCampsites = () => {
 };
 
 export const campsitesLoading = () => ({
-  type: ActionTypes.CAMPSITES_LOADING,
+  type: ActionTypes.CAMPSITES_LOADING
 });
 
 export const campsitesFailed = (errMess) => ({
