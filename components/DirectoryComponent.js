@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FlatList } from "react-native";
-import { ListItem } from "react-native-elements";
+import { Tile } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../Shared/baseUrl";
 
@@ -20,15 +20,15 @@ class Directory extends Component {
     //supplied to screen components
     const renderDirectoryItem = ({item}) => {
       return (
-        <ListItem
+        <Tile
           title={item.name}
           caption={item.description}
           featured
           onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
           //onpress is returning the navigate method we took from this.props.navigation
           //optional second param is an object where we can specify the specific id of the param
-          imgSrc={{uri: baseUrl + item.image }}
-        />
+          imageSrc={{uri: baseUrl + item.image }}
+        />      
 
       );
     }; //why imgsrc over left avatar, why cant i acces my item properties
