@@ -33,7 +33,7 @@ const mapDispatchToProps = {
   fetchComments,
   fetchPromotions,
   fetchPartners,
-}; // these are the action creators that have been thunked in order to creat asynchronous actions
+}; // these are the action creators that have been thunked in order to create asynchronous actions
 
 const ContactNavigator = createStackNavigator(
   {
