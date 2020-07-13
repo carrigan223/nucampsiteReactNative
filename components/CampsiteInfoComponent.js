@@ -11,7 +11,7 @@ import {
 import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../Shared/baseUrl";
-import { postFavorite } from "../redux/ActionCreators";
+import { postFavorite, postComment } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
@@ -24,6 +24,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   postFavorite: (campsiteId) => postFavorite(campsiteId),
+  postComment: (campsiteId, rating, author, text) =>
+    postComment(campsiteId, rating, author, text),
 };
 
 function RenderCampsite(props) {
@@ -82,7 +84,9 @@ function RenderComments({ comments }) {
           imageSize={10}
           style={{ alignItems: "flex-start", paddingVertical: "5%" }}
         />
-        <Text style={{ fontSize: 12 }}>{`-- ${item.text}, ${item.date}`}</Text>
+        <Text
+          style={{ fontSize: 12 }}
+        >{`-- ${item.author}, ${item.date}`}</Text>
       </View>
     ); //renderCommentItem is taking each of our items in the array destructuring
     //and we are then returning  our view with the text being the properties of our
@@ -118,10 +122,15 @@ class CampsiteInfo extends Component {
     this.setState({ showModal: !this.state.showModal });
   }
 
-  handleComment(campsiteId) {
-    console.log(JSON.stringify(this.state));
+  handleComment = (campsiteId) => {
+    this.props.postComment(
+      campsiteId,
+      this.state.rating,
+      this.state.author,
+      this.state.text
+    );
     this.toggleModal();
-  }
+  };
 
   resetForm() {
     this.setState({
@@ -129,7 +138,7 @@ class CampsiteInfo extends Component {
       rating: "5",
       author: "",
       text: "",
-      comment: "",
+      //comment: "",
     });
   }
 
@@ -187,8 +196,8 @@ class CampsiteInfo extends Component {
               leftIcon={{ type: "font-awesome", name: "comment-o" }}
               placeholder="Comment"
               leftIconContainerStyle={{ paddingRight: 10 }}
-              onChangeText={(comment) => this.setState({ comment })}
-              value={this.state.comment}
+              onChangeText={(comment) => this.setState({ text: comment })}
+              value={this.state.text}
             />
           </View>
           <View>
