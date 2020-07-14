@@ -245,7 +245,7 @@ const MainNavigator = createDrawerNavigator(
         ),
       },
     },
-    Reservation: {
+    Favorites: {
       screen: FavoritesNavigator,
       navigationOptions: {
         drawerLabel: "My Favorites",
