@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, Alert } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Swipeout  from 'react-native-swipeout';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 };// passing the state to component as props 
 
 const mapDispatchToProps = { deleteFavorite: campsiteId => (deleteFavorite(campsiteId))};
-
+//we have to dispatch the delete favorite ation from redux by using mapdispatch to props
 class Favorites extends Component {
 
     static navigationOptions = {
@@ -29,9 +29,25 @@ class Favorites extends Component {
                 {
                     text: 'Delete',
                     type: 'delete',
-                    onPress: () => this.props.deleteFavorite(item.id)
+                    onPress: () => {
+                        Alert.alert(
+                            'Delete Favorite?',
+                            'Are you sure you want to delete favorite campsite ' + item.name + '?',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () =>console.log(item.name + ' Not Deleted'),
+                                    style: 'cancel'
+                                },{
+                                    text: 'OK',
+                                    onPress: () => this.props.deleteFavorite(item.id)
+                                }
+                            ],
+                            { cancelable: false }
+                        );
+                    }
                 }
-            ];
+            ];//this array is containing the delete button object in in the rightbutton 
             return (
                 <Swipeout right={rightButton} autoClose={true}>
                     <ListItem
@@ -41,7 +57,8 @@ class Favorites extends Component {
                         onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}//we are using the navigate function we pulled from navigation to make the campsite pressable
                 />
                 </Swipeout>
-            );//this is taking the items we have filtered already in our flatlist
+            );//this is taking the items we have filtered already in our flatlist and we are nesting
+            //it in a swipout component to give us a hidden button to delete favorites
         };
 
         if (this.props.campsites.isLoading) {
