@@ -1,0 +1,57 @@
+import React, { Component } from 'react';
+import { FlatList, View, Text } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../Shared/baseUrl';
+
+const mapStateToProps = state => {
+    return {
+        campsites: state.campsites,
+        favorites: state.favorites
+    };
+};// passing the state to component as props 
+
+class Favorites extends Component {
+
+    static navigationOptions = {
+        title: 'My Favorites'
+    }//will be connecting this to our stack navigator to use in the drawer this will be our title
+
+    render() {
+        const { navigate } = this.props.navigation;// this is allowing us to access the navigate function from our navigation properties
+        const renderFavoriteItem = ({ item }) => {
+            return (
+                <ListItem
+                    title={item.name}
+                    subtitle={item.description}
+                    leftAvatar={{source: {uri: baseUrl + item.image}}}//this avatar is sourced eith the image property
+                    onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}//we are using the navigate function we pulled from navigation to make the campsite pressable
+                />
+            );//this is taking the items we have filtered already in our flatlist
+        };
+
+        if (this.props.campsites.isLoading) {
+            return <Loading />
+        }//if true loading property will return the loading component
+        if (this.props.campsites.errMess) {
+            return(
+                <View>
+                    <Text>{this.props.campsites.errMess}</Text>
+                </View>
+            );
+        }//if true errMess will return the errMess property of the campsite
+        return (
+            <FlatList
+                data={this.props.campsites.campsites.filter(
+                    campsite => this.props.favorites.includes(campsite.id)
+                )}//for our data filtering through this.props.campsites(we have mapped our state to props this is how we access) 
+                  //returning ones marked favorites
+                renderItem={renderFavoriteItem}//calling the renderFavoriteItem method we created above 
+                keyExtractor={item => item.id.toString()}
+            />
+        ); //else we return our flatlist which filters out campistes which our favorites
+    }
+}
+
+export default connect(mapStateToProps)(Favorites);//connected to redux store which is managing our state
