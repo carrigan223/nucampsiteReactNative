@@ -12,6 +12,7 @@ import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../Shared/baseUrl";
 import { postFavorite, postComment } from "../redux/ActionCreators";
+import * as Animatable from "react-native-animatable";
 
 const mapStateToProps = (state) => {
   return {
@@ -36,37 +37,39 @@ function RenderCampsite(props) {
     //a campsite, if this is all true we will return the card containing that campsites info
     console.log("favorites", props.favorite);
     return (
-      <Card
-        featuredTitle={campsite.name}
-        image={{ uri: baseUrl + campsite.image }}
-      >
-        <Text style={{ margin: 10 }}>{campsite.description}</Text>
-        <View style={styles.cardRow}>
-          <Icon //this icon is the font awesome heart displayed uder the description
-            name={props.favorite ? "heart" : "heart-o"}
-            //the name is checking the props we drilled to render campsite
-            //if true it is heart  if false it is the outline
-            type="font-awesome"
-            color="#f50"
-            raised
-            reverse
-            onPress={() =>
-              props.favorite
-                ? console.log("Already set as a favorite")
-                : props.markFavorite()
-            }
-          />
-          <Icon
-            style={styles.cardItem}
-            name="pencil"
-            type="font-awesome"
-            raised
-            color="#5637DD"
-            reverse
-            onPress={() => props.onShowModal()}
-          />
-        </View>
-      </Card>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <Card
+          featuredTitle={campsite.name}
+          image={{ uri: baseUrl + campsite.image }}
+        >
+          <Text style={{ margin: 10 }}>{campsite.description}</Text>
+          <View style={styles.cardRow}>
+            <Icon //this icon is the font awesome heart displayed uder the description
+              name={props.favorite ? "heart" : "heart-o"}
+              //the name is checking the props we drilled to render campsite
+              //if true it is heart  if false it is the outline
+              type="font-awesome"
+              color="#f50"
+              raised
+              reverse
+              onPress={() =>
+                props.favorite
+                  ? console.log("Already set as a favorite")
+                  : props.markFavorite()
+              }
+            />
+            <Icon
+              style={styles.cardItem}
+              name="pencil"
+              type="font-awesome"
+              raised
+              color="#5637DD"
+              reverse
+              onPress={() => props.onShowModal()}
+            />
+          </View>
+        </Card>
+      </Animatable.View>
     );
   }
   //else we just return the view
@@ -94,13 +97,15 @@ function RenderComments({ comments }) {
   };
 
   return (
-    <Card title="Comments">
-      <FlatList
-        data={comments}
-        renderItem={renderCommentItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </Card>
+    <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+      <Card title="Comments">
+        <FlatList
+          data={comments}
+          renderItem={renderCommentItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </Card>
+    </Animatable.View>
   ); //the data being passed in to our flatlist is the filtered array of comments
   //then for each item is rendering the constant renderCommentItem
 }

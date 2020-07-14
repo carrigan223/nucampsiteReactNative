@@ -4,6 +4,7 @@ import { Tile } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../Shared/baseUrl";
 import Loading from "./LoadingComponent";
+import * as Animatable from "react-native-animatable";
 
 const mapStateToProps = (state) => {
   return {
@@ -21,15 +22,17 @@ class Directory extends Component {
     //supplied to screen components
     const renderDirectoryItem = ({ item }) => {
       return (
-        <Tile
-          title={item.name}
-          caption={item.description}
-          featured
-          onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
-          //onpress is returning the navigate method we took from this.props.navigation
-          //optional second param is an object where we can specify the specific id of the param
-          imageSrc={{ uri: baseUrl + item.image }}
-        />
+        <Animatable.View animation="fadeInRightBig" duration={2000} >
+          <Tile
+            title={item.name}
+            caption={item.description}
+            featured
+            onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
+            //onpress is returning the navigate method we took from this.props.navigation
+            //optional second param is an object where we can specify the specific id of the param
+            imageSrc={{ uri: baseUrl + item.image }}
+          />
+        </Animatable.View>
       );
     }; //why imgsrc over left avatar, why cant i acces my item properties
     if (this.props.campsites.isLoading) {
