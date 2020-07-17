@@ -125,7 +125,7 @@ export const promotionsLoading = () => ({
 
 export const promotionsFailed = (errMess) => ({
   type: ActionTypes.PROMOTIONS_FAILED,
-  payload: promotions,
+  payload: errMess,
 });
 
 export const addPromotions = (promotions) => ({
@@ -163,7 +163,7 @@ export const partnersLoading = () => ({
   type: ActionTypes.PARTNERS_LOADING,
 });
 
-export const partnersFailed = () => ({
+export const partnersFailed = (errMess) => ({
   type: ActionTypes.PARTNERS_FAILED,
   payload: errMess,
 });

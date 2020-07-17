@@ -68,13 +68,13 @@ class Favorites extends Component {
       //it in a swipout component to give us a hidden button to delete favorites
     };
 
-    if (this.props.campsites.isLoading) {
+    if (this.props.campsites.campsites.isLoading) {
       return <Loading />;
     } //if true loading property will return the loading component
-    if (this.props.campsites.errMess) {
+    if (this.props.campsites.campsites.errMess) {
       return (
         <View>
-          <Text>{this.props.campsites.errMess}</Text>
+          <Text>{this.props.campsites.campsites.errMess}</Text>
         </View>
       );
     } //if true errMess will return the errMess property of the campsite

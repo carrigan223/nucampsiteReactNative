@@ -7,6 +7,8 @@ import {
   Modal,
   Button,
   StyleSheet,
+  Alert,
+  PanResponder,
 } from "react-native";
 import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
@@ -32,12 +34,48 @@ const mapDispatchToProps = {
 function RenderCampsite(props) {
   const { campsite } = props;
 
+  const recognizeDrag = ({ dx }) => (dx < -200 ? true : false);
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderEnd: (e, gestureState) => {
+      console.log("pan responder end", gestureState);
+      if (recognizeDrag(gestureState)) {
+        Alert.alert(
+          "Add Favorite",
+          "Are you sure you wish to add " + campsite.name + " to favorites?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => console.log("Cancel Pressed"),
+            },
+            {
+              text: "OK",
+              onPress: () =>
+                props.favorite
+                  ? console.log("Already set as a favorite")
+                  : props.markFavorite(),
+            },
+          ],
+          { cancelable: false }
+        );
+      }
+      return true;
+    },
+  });
+
   if (campsite) {
     //if onpress is initiated and it takes in an ID which our filer method will take in and return
     //a campsite, if this is all true we will return the card containing that campsites info
     console.log("favorites", props.favorite);
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+      <Animatable.View
+        animation="fadeInDown"
+        duration={2000}
+        delay={1000}
+        {...panResponder.panHandlers}
+      >
         <Card
           featuredTitle={campsite.name}
           image={{ uri: baseUrl + campsite.image }}
@@ -117,7 +155,6 @@ class CampsiteInfo extends Component {
     this.state = {
       showModal: false,
       rating: 5,
-      comment: "",
       author: "",
       text: "",
     };
