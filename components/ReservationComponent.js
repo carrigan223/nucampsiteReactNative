@@ -52,6 +52,7 @@ class Reservation extends Component {
           text: "OK",
           onPress: () => {
             console.log("Ok Pressed");
+            console.log(JSON.stringify(this.state));
             this.resetForm();
           },
         },
