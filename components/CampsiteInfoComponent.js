@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert,
   PanResponder,
+  Share,
 } from "react-native";
 import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
@@ -76,6 +77,19 @@ function RenderCampsite(props) {
     },
   });
 
+  const shareCampsite = (title, message, url) => {
+    Share.share(
+      {
+        title,
+        message: `${title}: ${message} ${url}`,
+        url,
+      },
+      {
+        dialogTitle: "Share " + title,
+      }
+    );
+  };
+
   if (campsite) {
     //if onpress is initiated and it takes in an ID which our filer method will take in and return
     //a campsite, if this is all true we will return the card containing that campsites info
@@ -116,6 +130,21 @@ function RenderCampsite(props) {
               color="#5637DD"
               reverse
               onPress={() => props.onShowModal()}
+            />
+            <Icon
+              name={"share"}
+              type="font-awesome"
+              color="#5637DD"
+              style={styles.cardItem}
+              raised
+              reverse
+              onPress={() =>
+                shareCampsite(
+                  campsite.name,
+                  campsite.description,
+                  baseUrl + campsite.image
+                )
+              }
             />
           </View>
         </Card>
